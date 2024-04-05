@@ -9,6 +9,7 @@ import (
 )
 
 // set logging
+// todo: demonstrate modified logging from main.go
 func LogConfig() *zap.Logger {
 	config := zap.NewProductionConfig()
 	logLevel := os.Getenv("LOG_LEVEL")

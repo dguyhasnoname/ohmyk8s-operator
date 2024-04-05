@@ -282,3 +282,24 @@ NAME                                              READY   STATUS    RESTARTS   A
 operator-01-controller-manager-78b94877c4-wrcsz   2/2     Running   0          49m
 [09:00 PM IST 05.04.2024 ☸ minikube 📁 ~/git/dguyhasnoname/ohmyk8s-operator/operator-01 ❱ main ▲] 
 ```
+
+## Undeploy the controller from cluster
+
+```
+[11:23 PM IST 05.04.2024 ☸ minikube 📁 ~/git/dguyhasnoname/ohmyk8s-operator/operator-01 𖦥 main] 
+ ┗━ ॐ  make undeploy
+/Users/mk/git/dguyhasnoname/ohmyk8s-operator/operator-01/bin/kustomize build config/default | kubectl delete --ignore-not-found=false -f -
+namespace "operator-01-system" deleted
+customresourcedefinition.apiextensions.k8s.io "namespaceconfigs.namespaceconfig.myoperator.io" deleted
+serviceaccount "operator-01-controller-manager" deleted
+role.rbac.authorization.k8s.io "operator-01-leader-election-role" deleted
+clusterrole.rbac.authorization.k8s.io "operator-01-manager-role" deleted
+clusterrole.rbac.authorization.k8s.io "operator-01-metrics-reader" deleted
+clusterrole.rbac.authorization.k8s.io "operator-01-proxy-role" deleted
+rolebinding.rbac.authorization.k8s.io "operator-01-leader-election-rolebinding" deleted
+clusterrolebinding.rbac.authorization.k8s.io "operator-01-manager-rolebinding" deleted
+clusterrolebinding.rbac.authorization.k8s.io "operator-01-proxy-rolebinding" deleted
+service "operator-01-controller-manager-metrics-service" deleted
+deployment.apps "operator-01-controller-manager" deleted
+
+```

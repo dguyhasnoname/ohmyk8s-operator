@@ -18,12 +18,19 @@ mgr, err := ctrl.NewManager(<remote-k8s-client>, ctrl.Options{
 ### From where the reconcile func is called?
 
 ```
-if err = (&controller.NSAssetReconciler{
-    Client: mgr.GetClient(),
-    Scheme: mgr.GetScheme(),
-}).SetupWithManager(mgr); err != nil {
+if err = (&controller.NSAssetReconciler{                                         # creates an instance of the controller.NSAssetReconciler struct. The & operator is used to take the address of the struct, which is often required when passing the struct to a function that expects a pointer.
+    Client: mgr.GetClient(),                                                     # retrieves a Kubernetes client from the controller manager (mgr) and assigns it to the Client field of the NSAssetReconciler struct. This client will be used by the controller to interact with the Kubernetes API server.
+    Scheme: mgr.GetScheme(),                                                     # retrieves the Kubernetes runtime scheme from the controller manager (mgr) and assigns it to the Scheme field of the NSAssetReconciler struct. The scheme is used by the controller to understand the types of Kubernetes objects it manages.
+}).SetupWithManager(mgr); err != nil {                                           # calls the SetupWithManager function on the newly created NSAssetReconciler instance. This function is responsible for registering the controller with the controller manager (mgr). 
     setupLog.Error(err, "unable to create controller", "controller", "NSAsset")
 }
+```
+
+```
+return ctrl.NewControllerManagedBy(mgr).                # creates a new controller object. The mgr argument  reference to the controller manager instance in the project, which is responsible for running all the controllers.
+    For(&namespaceconfigv1.Namespaceconfig{}).          # specifies the Kubernetes resource type that the controller will watch for changes.
+    Owns(&corev1.Namespace{}, predicateNamespace).      # defines the relationship b/w NamespaceConfig and ns resources. It means that  controller will manage ns resources that are "owned" by the NamespaceConfig resources it watches.
+    Complete(r)                                         # completes the controller definition by passing the controller object (r) to be managed by the controller manager.
 ```
 
 ### What are predicates?
