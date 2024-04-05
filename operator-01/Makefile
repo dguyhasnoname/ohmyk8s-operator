@@ -1,6 +1,6 @@
 
 # Image URL to use all building/pushing image targets
-IMG ?= dguyhasnoname/myoperator:0.0.1
+IMG ?= dguyhasnoname/myoperator:0.0.2
 # ENVTEST_K8S_VERSION refers to the version of kubebuilder assets to be downloaded by envtest binary.
 ENVTEST_K8S_VERSION = 1.28.0
 
@@ -117,7 +117,7 @@ docker-buildx: ## Build and push docker image for the manager for cross-platform
 	# - $(CONTAINER_TOOL) buildx build --push --platform=$(PLATFORMS) --tag ${IMG} -f Dockerfile.cross .
 	# - $(CONTAINER_TOOL) buildx rm project-v3-builder
 	# rm Dockerfile.cross
-	$(CONTAINER_TOOL) buildx build --platform linux/arm64 -t myoperator:0.0.1 -f Dockerfile .
+	$(CONTAINER_TOOL) buildx build --platform linux/arm64 -t myoperator:0.0.2 -f Dockerfile .
 
 ##@ Deployment
 

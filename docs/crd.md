@@ -195,3 +195,90 @@ NAME                                             CREATED AT
 namespaceconfigs.namespaceconfig.myoperator.io   2024-04-05T06:51:43Z
 [12:21 PM IST 05.04.2024 ☸ minikube 📁 ~/git/dguyhasnoname/ohmyk8s-operator/operator-01 ❱ main ▲] 
 ```
+
+## Run the controller locally
+
+Run `make run` to run the controller from local on a test cluster:
+
+```
+[07:28 PM IST 05.04.2024 ☸ minikube 📁 ~/git/dguyhasnoname/ohmyk8s-operator/operator-01 ❱ main ▲] 
+ ┗━ ॐ  make run
+test -s /Users/Mukund_Bihari/git/dguyhasnoname/ohmyk8s-operator/operator-01/bin/controller-gen && /Users/Mukund_Bihari/git/dguyhasnoname/ohmyk8s-operator/operator-01/bin/controller-gen --version | grep -q v0.13.0 || \
+	GOBIN=/Users/Mukund_Bihari/git/dguyhasnoname/ohmyk8s-operator/operator-01/bin go install sigs.k8s.io/controller-tools/cmd/controller-gen@v0.13.0
+/Users/Mukund_Bihari/git/dguyhasnoname/ohmyk8s-operator/operator-01/bin/controller-gen rbac:roleName=manager-role crd webhook paths="./..." output:crd:artifacts:config=config/crd/bases
+/Users/Mukund_Bihari/git/dguyhasnoname/ohmyk8s-operator/operator-01/bin/controller-gen object:headerFile="hack/boilerplate.go.txt" paths="./..."
+go fmt ./...
+go vet ./...
+go run ./cmd/main.go
+{"level":"INFO","timestamp":"2024-04-05T19:31:14.519+0530","caller":"util/util.go:19","log":"Initializing env..."}
+2024-04-05T19:31:14+05:30	INFO	setup	starting manager
+2024-04-05T19:31:14+05:30	INFO	starting server	{"kind": "health probe", "addr": "[::]:8081"}
+2024-04-05T19:31:14+05:30	INFO	controller-runtime.metrics	Starting metrics server
+2024-04-05T19:31:14+05:30	INFO	controller-runtime.metrics	Serving metrics server	{"bindAddress": ":8080", "secure": false}
+2024-04-05T19:31:14+05:30	INFO	Starting EventSource	{"controller": "namespaceconfig", "controllerGroup": "namespaceconfig.myoperator.io", "controllerKind": "Namespaceconfig", "source": "kind source: *v1.Namespaceconfig"}
+2024-04-05T19:31:14+05:30	INFO	Starting EventSource	{"controller": "namespaceconfig", "controllerGroup": "namespaceconfig.myoperator.io", "controllerKind": "Namespaceconfig", "source": "kind source: *v1.Namespace"}
+2024-04-05T19:31:14+05:30	INFO	Starting Controller	{"controller": "namespaceconfig", "controllerGroup": "namespaceconfig.myoperator.io", "controllerKind": "Namespaceconfig"}
+2024-04-05T19:31:14+05:30	INFO	Starting workers	{"controller": "namespaceconfig", "controllerGroup": "namespaceconfig.myoperator.io", "controllerKind": "Namespaceconfig", "worker count": 1}
+{"level":"INFO","timestamp":"2024-04-05T19:31:55.956+0530","caller":"controller/namespaceconfig_controller.go:61","log":"Starting namespace config reconcilliation"}
+{"level":"INFO","timestamp":"2024-04-05T19:31:55.956+0530","caller":"controller/namespaceconfig_controller.go:92","log":"Finalizer not found, adding finalizer namespaceconfig.myoperator.io/finalizer to Namespaceconfig namespaceconfig-sample"}
+{"level":"INFO","timestamp":"2024-04-05T19:31:55.961+0530","caller":"controller/namespaceconfig_controller.go:97","log":"Finalizer added to Namespaceconfig namespaceconfig-sample"}
+{"level":"INFO","timestamp":"2024-04-05T19:31:55.961+0530","caller":"controller/namespaceconfig_controller.go:103","log":"Creating Namespace apr-dev"}
+{"level":"INFO","timestamp":"2024-04-05T19:31:55.964+0530","caller":"controller/namespaceconfig_controller.go:107","log":"Namespace apr-dev created"}
+{"level":"INFO","timestamp":"2024-04-05T19:31:55.968+0530","caller":"controller/namespaceconfig_controller.go:114","log":"Namespaceconfig namespaceconfig-sample status updated"}
+{"level":"INFO","timestamp":"2024-04-05T19:31:55.971+0530","caller":"controller/namespaceconfig_controller.go:120","log":"LimitRange created"}
+{"level":"INFO","timestamp":"2024-04-05T19:31:55.973+0530","caller":"controller/namespaceconfig_controller.go:127","log":"ResourceQuota created"}
+{"level":"INFO","timestamp":"2024-04-05T19:31:55.974+0530","caller":"controller/namespaceconfig_controller.go:61","log":"Starting namespace config reconcilliation"}
+^C2024-04-05T19:33:00+05:30	INFO	Stopping and waiting for non leader election runnables
+2024-04-05T19:33:00+05:30	INFO	Stopping and waiting for leader election runnables
+2024-04-05T19:33:00+05:30	INFO	Shutdown signal received, waiting for all workers to finish	{"controller": "namespaceconfig", "controllerGroup": "namespaceconfig.myoperator.io", "controllerKind": "Namespaceconfig"}
+2024-04-05T19:33:00+05:30	INFO	All workers finished	{"controller": "namespaceconfig", "controllerGroup": "namespaceconfig.myoperator.io", "controllerKind": "Namespaceconfig"}
+2024-04-05T19:33:00+05:30	INFO	Stopping and waiting for caches
+2024-04-05T19:33:00+05:30	INFO	Stopping and waiting for webhooks
+2024-04-05T19:33:00+05:30	INFO	Stopping and waiting for HTTP servers
+2024-04-05T19:33:00+05:30	INFO	controller-runtime.metrics	Shutting down metrics server with timeout of 1 minute
+2024-04-05T19:33:00+05:30	INFO	shutting down server	{"kind": "health probe", "addr": "[::]:8081"}
+2024-04-05T19:33:00+05:30	INFO	Wait completed, proceeding to shutdown the manager
+
+```
+
+## Running the controller in cluster
+
+A docker image would be needed to run the controller in a cluster, and the image needs to be pushed in a docker registry:
+
+```
+docker buildx build --platform linux/arm64 -t dguyhasnoname/myoperator:0.0.2 -f Dockerfile .
+```
+
+Run `make deploy` to run the controller as a pod in a test cluster:
+
+```
+[07:45 PM IST 05.04.2024 ☸ minikube 📁 ~/git/dguyhasnoname/ohmyk8s-operator/operator-01 ❱ main ▲] 
+ ┗━ ॐ  make deploy
+test -s /Users/Mukund_Bihari/git/dguyhasnoname/ohmyk8s-operator/operator-01/bin/controller-gen && /Users/Mukund_Bihari/git/dguyhasnoname/ohmyk8s-operator/operator-01/bin/controller-gen --version | grep -q v0.13.0 || \
+	GOBIN=/Users/Mukund_Bihari/git/dguyhasnoname/ohmyk8s-operator/operator-01/bin go install sigs.k8s.io/controller-tools/cmd/controller-gen@v0.13.0
+/Users/Mukund_Bihari/git/dguyhasnoname/ohmyk8s-operator/operator-01/bin/controller-gen rbac:roleName=manager-role crd webhook paths="./..." output:crd:artifacts:config=config/crd/bases
+cd config/manager && /Users/Mukund_Bihari/git/dguyhasnoname/ohmyk8s-operator/operator-01/bin/kustomize edit set image controller=dguyhasnoname/myoperator:0.0.2
+/Users/Mukund_Bihari/git/dguyhasnoname/ohmyk8s-operator/operator-01/bin/kustomize build config/default | kubectl apply -f -
+namespace/operator-01-system unchanged
+customresourcedefinition.apiextensions.k8s.io/namespaceconfigs.namespaceconfig.myoperator.io unchanged
+serviceaccount/operator-01-controller-manager unchanged
+role.rbac.authorization.k8s.io/operator-01-leader-election-role unchanged
+clusterrole.rbac.authorization.k8s.io/operator-01-manager-role created
+clusterrole.rbac.authorization.k8s.io/operator-01-metrics-reader created
+clusterrole.rbac.authorization.k8s.io/operator-01-proxy-role created
+rolebinding.rbac.authorization.k8s.io/operator-01-leader-election-rolebinding created
+clusterrolebinding.rbac.authorization.k8s.io/operator-01-manager-rolebinding created
+clusterrolebinding.rbac.authorization.k8s.io/operator-01-proxy-rolebinding created
+service/operator-01-controller-manager-metrics-service created
+deployment.apps/operator-01-controller-manager created
+```
+
+Running pod would show up like:
+
+```
+[09:00 PM IST 05.04.2024 ☸ minikube 📁 ~/git/dguyhasnoname/ohmyk8s-operator/operator-01 ❱ main ▲] 
+ ┗━ ॐ  kubectl get po -n operator-01-system 
+NAME                                              READY   STATUS    RESTARTS   AGE
+operator-01-controller-manager-78b94877c4-wrcsz   2/2     Running   0          49m
+[09:00 PM IST 05.04.2024 ☸ minikube 📁 ~/git/dguyhasnoname/ohmyk8s-operator/operator-01 ❱ main ▲] 
+```
