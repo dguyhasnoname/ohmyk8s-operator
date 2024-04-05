@@ -17,7 +17,6 @@ limitations under the License.
 package controller
 
 import (
-	"context"
 	"fmt"
 	"os"
 	"path/filepath"
@@ -27,10 +26,9 @@ import (
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 
-	"k8s.io/client-go/kubernetes/scheme"
-	//"k8s.io/client-go/rest"
 	admissionv1beta1 "k8s.io/api/admission/v1beta1"
 	apiextensions "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1"
+	"k8s.io/client-go/kubernetes/scheme"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/envtest"
@@ -47,8 +45,6 @@ import (
 var (
 	k8sClient   client.Client
 	testEnv     *envtest.Environment
-	ctx         context.Context
-	cancel      context.CancelFunc
 	testCluster string
 )
 
@@ -60,7 +56,6 @@ func TestControllers(t *testing.T) {
 
 var _ = BeforeSuite(func() {
 	logf.SetLogger(zap.New(zap.WriteTo(GinkgoWriter), zap.UseDevMode(true)))
-	//ctx, cancel := context.WithCancel(context.TODO())
 	testCluster := os.ExpandEnv("${TEST_CLUSTER}")
 	if testCluster != "" {
 		fmt.Println("Running test on", testCluster, " cluster.")
