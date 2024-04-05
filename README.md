@@ -18,4 +18,5 @@ instances of complex applications. It incorporates the operational knowledge of 
 - [setmeup](./docs/setmeup.md)
 - [bootstrap CRD](./docs/crd.md)
 - [reconcilliation logic](./docs/logic.md)
+- [advanced configs](./docs/advanced.md)
 
