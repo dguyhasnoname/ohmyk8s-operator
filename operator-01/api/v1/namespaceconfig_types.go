@@ -17,7 +17,7 @@ limitations under the License.
 package v1
 
 import (
-	v1 "k8s.io/api/core/v1"
+	//v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
@@ -29,16 +29,13 @@ type NamespaceconfigSpec struct {
 	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
 	// Important: Run "make" to regenerate code after modifying this file
 
-	NamespaceName string `json:"NamespaceName,omitempty"`
 	//+kubebuilder:validation:MaxLength=5
 	Environment string `json:"Environment"`
 	//+kubebuilder:validation:MaxLength=8
-	Abbreviation    string               `json:"Abbreviation"`
-	NamespaceLimits v1.LimitRangeSpec    `json:"NamespaceLimits,omitempty"`
-	NamespaceQuota  v1.ResourceQuotaSpec `json:"NamespaceQuota,omitempty"`
-	NamespaceOwner  string               `json:"NamespaceOwner,omitempty"`
-	Annotations     map[string]string    `json:"Annotations,omitempty"`
-	ExtraLabels     map[string]string    `json:"ExtraLabels,omitempty"`
+	Abbreviation string `json:"Abbreviation"`
+	// NamespaceLimits v1.LimitRangeSpec `json:"NamespaceLimits,omitempty"`
+	// NamespaceQuota v1.ResourceQuotaSpec `json:"NamespaceQuota,omitempty"`
+	NamespaceOwner string `json:"NamespaceOwner,omitempty"`
 }
 
 // NamespaceconfigStatus defines the observed state of Namespaceconfig

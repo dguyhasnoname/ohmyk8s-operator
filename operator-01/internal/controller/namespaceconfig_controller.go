@@ -19,7 +19,9 @@ package controller
 import (
 	"context"
 
+	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
@@ -50,25 +52,16 @@ type NamespaceconfigReconciler struct {
 // - https://pkg.go.dev/sigs.k8s.io/controller-runtime@v0.16.3/pkg/reconcile
 func (r *NamespaceconfigReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	log := util.Logs
-	ctx = util.Ctx
 	log.Info("Starting namespace config reconcilliation")
 
 	o := &namespaceconfigv1.Namespaceconfig{}
-	var nsaName string
 	err := r.Get(ctx, req.NamespacedName, o)
 	if err != nil {
 		if errors.IsNotFound(err) {
-			log.Info(
-				"Namespaceconfig ",
-				nsaName,
-				" resource not found. Ignoring since object must be deleted",
-			)
-			return ctrl.Result{}, nil
+			log.Error("Namespaceconfig ", o.GetName(), " not found.")
 		}
-		log.Error(err, "Failed to get Namespaceconfig", nsaName)
-		return ctrl.Result{}, err
 	}
-
+	namespaceName := o.Spec.Abbreviation + "-" + o.Spec.Environment
 	finalizerName := "namespaceconfig.myoperator.io/finalizer"
 	// check if the object is being deleted
 	if o.ObjectMeta.DeletionTimestamp.IsZero() {
@@ -81,6 +74,44 @@ func (r *NamespaceconfigReconciler) Reconcile(ctx context.Context, req ctrl.Requ
 			} else {
 				log.Info("Finalizer added to Namespaceconfig ", o.GetName())
 			}
+		}
+		// Attempt to create the namespace
+		if o.Status.Status == "" {
+			log.Info("Creating Namespace ", namespaceName)
+			namespace := &corev1.Namespace{
+				ObjectMeta: metav1.ObjectMeta{
+					Name: namespaceName,
+					Annotations: map[string]string{
+						"managed-by": "namespaceconfig.myoperator.io",
+					},
+					Labels: map[string]string{
+						"owner": o.Spec.NamespaceOwner,
+						"env":   o.Spec.Environment,
+					},
+				},
+			}
+			if err = r.Create(ctx, namespace); err != nil {
+				return ctrl.Result{}, err
+			} else {
+				log.Info("Namespace ", namespaceName, " created.")
+				log.Info("Setting ownerReference for namespace object ", namespaceName)
+				if err := ctrl.SetControllerReference(o, namespace, r.Scheme); err != nil {
+					log.Error(err, "Unable to set ownerReference for namespace object", namespaceName)
+				} else {
+					log.Info("OwnerReference set for namespace", namespaceName)
+				}
+				o.Status.NamespaceName = namespaceName
+				o.Status.Status = "RUNNING"
+				o.Status.LastUpdate = metav1.Now().String()
+				if err := r.Status().Update(ctx, o); err != nil {
+					return ctrl.Result{}, err
+				}
+				log.Info("Namespaceconfig ", o.GetName(), " status updated.")
+				return ctrl.Result{}, nil
+			}
+		} else {
+			log.Info("Namespace ", namespaceName, " already exists.")
+			return ctrl.Result{}, nil
 		}
 	} else {
 		log.Info("DeletionTimestamp is not zero for Namespaceconfig ", o.GetName())
