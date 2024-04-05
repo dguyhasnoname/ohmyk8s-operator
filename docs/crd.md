@@ -94,10 +94,10 @@ INFO Update dependencies:
 $ go mod tidy           
 INFO Running make:
 $ make generate                
-mkdir -p /Users/Mukund_Bihari/git/dguyhasnoname/ohmyk8s-operator/operator-01/bin
-test -s /Users/Mukund_Bihari/git/dguyhasnoname/ohmyk8s-operator/operator-01/bin/controller-gen && /Users/Mukund_Bihari/git/dguyhasnoname/ohmyk8s-operator/operator-01/bin/controller-gen --version | grep -q v0.13.0 || \
-	GOBIN=/Users/Mukund_Bihari/git/dguyhasnoname/ohmyk8s-operator/operator-01/bin go install sigs.k8s.io/controller-tools/cmd/controller-gen@v0.13.0
-/Users/Mukund_Bihari/git/dguyhasnoname/ohmyk8s-operator/operator-01/bin/controller-gen object:headerFile="hack/boilerplate.go.txt" paths="./..."
+mkdir -p /Users/mk/git/dguyhasnoname/ohmyk8s-operator/operator-01/bin
+test -s /Users/mk/git/dguyhasnoname/ohmyk8s-operator/operator-01/bin/controller-gen && /Users/mk/git/dguyhasnoname/ohmyk8s-operator/operator-01/bin/controller-gen --version | grep -q v0.13.0 || \
+	GOBIN=/Users/mk/git/dguyhasnoname/ohmyk8s-operator/operator-01/bin go install sigs.k8s.io/controller-tools/cmd/controller-gen@v0.13.0
+/Users/mk/git/dguyhasnoname/ohmyk8s-operator/operator-01/bin/controller-gen object:headerFile="hack/boilerplate.go.txt" paths="./..."
 Next: implement your new API and generate the manifests (e.g. CRDs,CRs) with:
 $ make manifests
 ```
@@ -174,10 +174,10 @@ Run `make manifests` command to generate CRD manifests, RBAC manifests, and webh
 ```
 [12:19 PM IST 05.04.2024 ☸ minikube 📁 ~/git/dguyhasnoname/ohmyk8s-operator/operator-01 ❱ main ▲] 
  ┗━ ॐ  make manifests
-/Users/Mukund_Bihari/git/dguyhasnoname/ohmyk8s-operator/operator-01/bin/controller-gen rbac:roleName=manager-role crd webhook paths="./..." output:crd:artifacts:config=config/crd/bases
+/Users/mk/git/dguyhasnoname/ohmyk8s-operator/operator-01/bin/controller-gen rbac:roleName=manager-role crd webhook paths="./..." output:crd:artifacts:config=config/crd/bases
 github.com/dguyhasnoname/ohmyk8s-operator/api/v1:-: use of unimported package "v1"
 github.com/dguyhasnoname/ohmyk8s-operator/api/v1:-: use of unimported package "v1"
-/Users/Mukund_Bihari/git/dguyhasnoname/ohmyk8s-operator/operator-01/bin/controller-gen rbac:roleName=manager-role crd webhook paths="./..." output:crd:artifacts:config=config/crd/bases
+/Users/mk/git/dguyhasnoname/ohmyk8s-operator/operator-01/bin/controller-gen rbac:roleName=manager-role crd webhook paths="./..." output:crd:artifacts:config=config/crd/bases
 ```
 
 Run `make install` to apply the generated manifest to test Kubernetes cluster:
@@ -185,9 +185,9 @@ Run `make install` to apply the generated manifest to test Kubernetes cluster:
 ```
 [12:21 PM IST 05.04.2024 ☸ minikube 📁 ~/git/dguyhasnoname/ohmyk8s-operator/operator-01 ❱ main ▲] 
  ┗━ ॐ  make install
-/Users/Mukund_Bihari/git/dguyhasnoname/ohmyk8s-operator/operator-01/bin/controller-gen rbac:roleName=manager-role crd webhook paths="./..." output:crd:artifacts:config=config/crd/bases
-test -s /Users/Mukund_Bihari/git/dguyhasnoname/ohmyk8s-operator/operator-01/bin/kustomize || GOBIN=/Users/Mukund_Bihari/git/dguyhasnoname/ohmyk8s-operator/operator-01/bin GO111MODULE=on go install sigs.k8s.io/kustomize/kustomize/v5@v5.2.1
-/Users/Mukund_Bihari/git/dguyhasnoname/ohmyk8s-operator/operator-01/bin/kustomize build config/crd | kubectl apply -f -
+/Users/mk/git/dguyhasnoname/ohmyk8s-operator/operator-01/bin/controller-gen rbac:roleName=manager-role crd webhook paths="./..." output:crd:artifacts:config=config/crd/bases
+test -s /Users/mk/git/dguyhasnoname/ohmyk8s-operator/operator-01/bin/kustomize || GOBIN=/Users/mk/git/dguyhasnoname/ohmyk8s-operator/operator-01/bin GO111MODULE=on go install sigs.k8s.io/kustomize/kustomize/v5@v5.2.1
+/Users/mk/git/dguyhasnoname/ohmyk8s-operator/operator-01/bin/kustomize build config/crd | kubectl apply -f -
 customresourcedefinition.apiextensions.k8s.io/namespaceconfigs.namespaceconfig.myoperator.io created
 [12:21 PM IST 05.04.2024 ☸ minikube 📁 ~/git/dguyhasnoname/ohmyk8s-operator/operator-01 ❱ main ▲] 
  ┗━ ॐ  kg crd
@@ -203,10 +203,10 @@ Run `make run` to run the controller from local on a test cluster:
 ```
 [07:28 PM IST 05.04.2024 ☸ minikube 📁 ~/git/dguyhasnoname/ohmyk8s-operator/operator-01 ❱ main ▲] 
  ┗━ ॐ  make run
-test -s /Users/Mukund_Bihari/git/dguyhasnoname/ohmyk8s-operator/operator-01/bin/controller-gen && /Users/Mukund_Bihari/git/dguyhasnoname/ohmyk8s-operator/operator-01/bin/controller-gen --version | grep -q v0.13.0 || \
-	GOBIN=/Users/Mukund_Bihari/git/dguyhasnoname/ohmyk8s-operator/operator-01/bin go install sigs.k8s.io/controller-tools/cmd/controller-gen@v0.13.0
-/Users/Mukund_Bihari/git/dguyhasnoname/ohmyk8s-operator/operator-01/bin/controller-gen rbac:roleName=manager-role crd webhook paths="./..." output:crd:artifacts:config=config/crd/bases
-/Users/Mukund_Bihari/git/dguyhasnoname/ohmyk8s-operator/operator-01/bin/controller-gen object:headerFile="hack/boilerplate.go.txt" paths="./..."
+test -s /Users/mk/git/dguyhasnoname/ohmyk8s-operator/operator-01/bin/controller-gen && /Users/mk/git/dguyhasnoname/ohmyk8s-operator/operator-01/bin/controller-gen --version | grep -q v0.13.0 || \
+	GOBIN=/Users/mk/git/dguyhasnoname/ohmyk8s-operator/operator-01/bin go install sigs.k8s.io/controller-tools/cmd/controller-gen@v0.13.0
+/Users/mk/git/dguyhasnoname/ohmyk8s-operator/operator-01/bin/controller-gen rbac:roleName=manager-role crd webhook paths="./..." output:crd:artifacts:config=config/crd/bases
+/Users/mk/git/dguyhasnoname/ohmyk8s-operator/operator-01/bin/controller-gen object:headerFile="hack/boilerplate.go.txt" paths="./..."
 go fmt ./...
 go vet ./...
 go run ./cmd/main.go
@@ -254,11 +254,11 @@ Run `make deploy` to run the controller as a pod in a test cluster:
 ```
 [07:45 PM IST 05.04.2024 ☸ minikube 📁 ~/git/dguyhasnoname/ohmyk8s-operator/operator-01 ❱ main ▲] 
  ┗━ ॐ  make deploy
-test -s /Users/Mukund_Bihari/git/dguyhasnoname/ohmyk8s-operator/operator-01/bin/controller-gen && /Users/Mukund_Bihari/git/dguyhasnoname/ohmyk8s-operator/operator-01/bin/controller-gen --version | grep -q v0.13.0 || \
-	GOBIN=/Users/Mukund_Bihari/git/dguyhasnoname/ohmyk8s-operator/operator-01/bin go install sigs.k8s.io/controller-tools/cmd/controller-gen@v0.13.0
-/Users/Mukund_Bihari/git/dguyhasnoname/ohmyk8s-operator/operator-01/bin/controller-gen rbac:roleName=manager-role crd webhook paths="./..." output:crd:artifacts:config=config/crd/bases
-cd config/manager && /Users/Mukund_Bihari/git/dguyhasnoname/ohmyk8s-operator/operator-01/bin/kustomize edit set image controller=dguyhasnoname/myoperator:0.0.2
-/Users/Mukund_Bihari/git/dguyhasnoname/ohmyk8s-operator/operator-01/bin/kustomize build config/default | kubectl apply -f -
+test -s /Users/mk/git/dguyhasnoname/ohmyk8s-operator/operator-01/bin/controller-gen && /Users/mk/git/dguyhasnoname/ohmyk8s-operator/operator-01/bin/controller-gen --version | grep -q v0.13.0 || \
+	GOBIN=/Users/mk/git/dguyhasnoname/ohmyk8s-operator/operator-01/bin go install sigs.k8s.io/controller-tools/cmd/controller-gen@v0.13.0
+/Users/mk/git/dguyhasnoname/ohmyk8s-operator/operator-01/bin/controller-gen rbac:roleName=manager-role crd webhook paths="./..." output:crd:artifacts:config=config/crd/bases
+cd config/manager && /Users/mk/git/dguyhasnoname/ohmyk8s-operator/operator-01/bin/kustomize edit set image controller=dguyhasnoname/myoperator:0.0.2
+/Users/mk/git/dguyhasnoname/ohmyk8s-operator/operator-01/bin/kustomize build config/default | kubectl apply -f -
 namespace/operator-01-system unchanged
 customresourcedefinition.apiextensions.k8s.io/namespaceconfigs.namespaceconfig.myoperator.io unchanged
 serviceaccount/operator-01-controller-manager unchanged
