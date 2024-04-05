@@ -33,9 +33,11 @@ type NamespaceconfigSpec struct {
 	Environment string `json:"Environment"`
 	//+kubebuilder:validation:MaxLength=8
 	Abbreviation string `json:"Abbreviation"`
-	// NamespaceLimits v1.LimitRangeSpec `json:"NamespaceLimits,omitempty"`
-	// NamespaceQuota v1.ResourceQuotaSpec `json:"NamespaceQuota,omitempty"`
+	// NamespaceLimits v1.LimitRangeSpec    `json:"NamespaceLimits,omitempty"`
+	// NamespaceQuota  v1.ResourceQuotaSpec `json:"NamespaceQuota,omitempty"`
 	NamespaceOwner string `json:"NamespaceOwner,omitempty"`
+	//+kubebuilder:validation:Enum=S;M;L
+	NamespaceSize string `json:"NamespaceSize,omitempty"`
 }
 
 // NamespaceconfigStatus defines the observed state of Namespaceconfig
@@ -49,6 +51,7 @@ type NamespaceconfigStatus struct {
 
 //+kubebuilder:object:root=true
 //+kubebuilder:subresource:status
+//+kubebuilder:resource:scope=Cluster,shortName={"nsc","nc","nsconfig"}
 
 // Namespaceconfig is the Schema for the namespaceconfigs API
 type Namespaceconfig struct {

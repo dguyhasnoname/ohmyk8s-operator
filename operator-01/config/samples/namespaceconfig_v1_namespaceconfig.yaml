@@ -9,4 +9,7 @@ metadata:
     app.kubernetes.io/created-by: operator-01
   name: namespaceconfig-sample
 spec:
-  # TODO(user): Add fields here
+  Environment: dev
+  Abbreviation: apr
+  NamespaceOwner: mukund
+  NamespaceSize: "S"
