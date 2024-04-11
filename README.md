@@ -15,6 +15,8 @@ instances of complex applications. It incorporates the operational knowledge of 
 
 ![flow](./docs/imgs/workshop_flow.png)
 
+Please follow below docs in sequence to start with operators:
+
 - [setmeup](./docs/setmeup.md)
 - [bootstrap CRD](./docs/crd.md)
 - [reconcilliation logic](./docs/logic.md)
