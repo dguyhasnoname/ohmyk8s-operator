@@ -47,3 +47,23 @@ func (r *NamespaceconfigReconciler) Reconcile(
 The reconciliation function is idempotent which means, it can be called multiple times for the same resource, and the result should be the same.
 
 
+## Relating modules and functions in sample operator-01
+
+Below diagram shows an illustration of all the functions/modules as explained above. `cmd/main.go` being the starting point when an operator runs, it calls the downstream functions/pkg to perform the full reconciliation logic. 
+
+![illustation](./imgs/illustration.png)
+
+
+## Go modules used in building operators
+
+![module_1](./imgs/module_1.png)
+
+---
+
+![module_2](./imgs/module_2.png)
+
+
+---
+
+![module_3](./imgs/module_3.png)
+
